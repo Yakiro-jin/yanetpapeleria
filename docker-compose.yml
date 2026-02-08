@@ -6,15 +6,13 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "3000"
+      - "8000:80"
     volumes:
       - .:/var/www/html
-    depends_on:
-      - db
     environment:
-      - DB_HOST=db
-      - DB_NAME=inventory
-      - DB_USER=user
-      - DB_PASSWORD=password
+      - DB_HOST=${DB_HOST_EXTERNO}  # Definir esta variable en Coolify
+      - DB_NAME=${DB_NAME_EXTERNO}
+      - DB_USER=${DB_USER_EXTERNO}
+      - DB_PASSWORD=${DB_PASSWORD_EXTERNO}
       - DB_DRIVER=pgsql
-      
+    restart: always
