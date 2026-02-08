@@ -1,0 +1,31 @@
+<?php
+
+class Database {
+    private $host;
+    private $db_name;
+    private $username;
+    private $password;
+    public $conn;
+
+    public function __construct() {
+        $this->host = getenv('DB_HOST') ?: 'db';
+        $this->db_name = getenv('POSTGRES_DB') ?: 'inventory';
+        $this->username = getenv('POSTGRES_USER') ?: 'user';
+        $this->password = getenv('POSTGRES_PASSWORD') ?: 'password';
+    }
+
+    public function getConnection() {
+        $this->conn = null;
+
+        try {
+            $dsn = "pgsql:host=" . $this->host . ";dbname=" . $this->db_name;
+            $this->conn = new PDO($dsn, $this->username, $this->password);
+            $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->conn->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+        } catch(PDOException $exception) {
+            echo "Connection error: " . $exception->getMessage();
+        }
+
+        return $this->conn;
+    }
+}
