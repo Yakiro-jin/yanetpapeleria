@@ -7,13 +7,28 @@ services:
       dockerfile: Dockerfile
     # Mapea el puerto 3000 del host al 80 del contenedor
     ports:
-      - "3000:80"
+      - "8000:80"
     volumes:
       - .:/var/www/html
     environment:
-      - DB_HOST=192.168.100.100
-      - DB_PORT=5432
+      - DB_HOST=db
       - DB_NAME=inventory
-      - DB_USER=postgres
-      - DB_PASSWORD=your_secure_password
+      - DB_USER=user
+      - DB_PASSWORD=password
       - DB_DRIVER=pgsql
+
+  db:
+    image: postgres:15-alpine
+    restart: always
+    environment:
+      - POSTGRES_DB=inventory
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - ./sql/schema.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+
+volumes:
+  db_data:
