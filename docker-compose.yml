@@ -6,13 +6,16 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "3000"
+      - "8000:80"
     volumes:
       - .:/var/www/html
     environment:
-      - DB_HOST=${DB_HOST_EXTERNO}  # Definir esta variable en Coolify
-      - DB_NAME=${DB_NAME_EXTERNO}
-      - DB_USER=${DB_USER_EXTERNO}
-      - DB_PASSWORD=${DB_PASSWORD_EXTERNO}
+      # Conectar a tu DB existente (ajusta estos valores)
+      - DB_HOST=192.168.100.100  # IP de tu servidor PostgreSQL
+      - DB_NAME=pagina   # Nombre de tu base de datos existente
+      - DB_USER=postgres         # Usuario de tu DB
+      - DB_PASSWORD=Admin123  # Contraseña de tu DB
       - DB_DRIVER=pgsql
+      - DB_PORT=5432            # Puerto (usualmente 5432)
+    # Elimina depends_on ya que no crearás un servicio db
     restart: always
